@@ -8,6 +8,7 @@ RUN apk add --no-cache \
     py3-pip \
     curl \
     bash \
+    git \
     && ln -sf python3 /usr/bin/python \
     && ln -sf pip3 /usr/bin/pip \
     && pip install --upgrade --break-system-packages pip setuptools wheel
@@ -17,8 +18,8 @@ RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp \
     -o /usr/local/bin/yt-dlp \
     && chmod a+rx /usr/local/bin/yt-dlp
 
-# Install the community node directly from GitHub
+# Install the community node using HTTPS instead of SSH
 RUN cd /usr/local/lib/node_modules/n8n && \
-    npm install github:endcycles/n8n-nodes-youtube-transcript
+    npm install https://github.com/endcycles/n8n-nodes-youtube-transcript.git
 
 USER node
