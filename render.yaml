@@ -4,12 +4,12 @@ services:
     env: docker
     dockerfilePath: ./Dockerfile
     plan: starter
-    region: oregon
     branch: main
+    region: oregon
 
     envVars:
-      # ── Core ──────────────────────────────────────────
-      - key: NODE_ENV
+      # ── Core ────────────────────────────
+      - key: NODE_ENV                      # production mode
         value: production
       - key: N8N_HOST
         value: 0.0.0.0
@@ -20,12 +20,12 @@ services:
           type: web
           name: n8n-app
           property: port
-      - key: WEBHOOK_URL
+      - key: WEBHOOK_URL                   # public URL
         value: https://fc-2q02.onrender.com
-      - key: N8N_ENCRYPTION_KEY
+      - key: N8N_ENCRYPTION_KEY            # auto-generated secret
         generateValue: true
 
-      # ── Neon Postgres ────────────────────────────────
+      # ── Neon Postgres (direct values) ──
       - key: DB_TYPE
         value: postgresdb
       - key: DB_POSTGRESDB_HOST
@@ -42,11 +42,8 @@ services:
         value: "true"
       - key: DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED
         value: "false"
-      # (Optional) full URI if you prefer
-      # - key: DB_POSTGRESDB_CONNECTION_STRING
-      #   value: postgresql://neondb_owner:npg_Qm52GBYqekcv@ep-round-glade-a1922skr-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
 
-    disk:
+    disk:                                  # persistent workflows/files
       name: n8n-data
-      mountPath: /home/node/.n8n   # path hard-coded in n8n
+      mountPath: /home/node/.n8n
       sizeGB: 1
