@@ -1,0 +1,52 @@
+services:
+  - type: web
+    name: n8n-app
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    region: oregon
+    branch: main
+
+    envVars:
+      # ── Core ──────────────────────────────────────────
+      - key: NODE_ENV
+        value: production
+      - key: N8N_HOST
+        value: 0.0.0.0
+      - key: N8N_PROTOCOL
+        value: https
+      - key: N8N_PORT
+        fromService:
+          type: web
+          name: n8n-app
+          property: port
+      - key: WEBHOOK_URL
+        value: https://fc-2q02.onrender.com
+      - key: N8N_ENCRYPTION_KEY
+        generateValue: true
+
+      # ── Neon Postgres ────────────────────────────────
+      - key: DB_TYPE
+        value: postgresdb
+      - key: DB_POSTGRESDB_HOST
+        value: ep-round-glade-a1922skr-pooler.ap-southeast-1.aws.neon.tech
+      - key: DB_POSTGRESDB_PORT
+        value: "5432"
+      - key: DB_POSTGRESDB_DATABASE
+        value: neondb
+      - key: DB_POSTGRESDB_USER
+        value: neondb_owner
+      - key: DB_POSTGRESDB_PASSWORD
+        value: npg_Qm52GBYqekcv
+      - key: DB_POSTGRESDB_SSL
+        value: "true"
+      - key: DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED
+        value: "false"
+      # (Optional) full URI if you prefer
+      # - key: DB_POSTGRESDB_CONNECTION_STRING
+      #   value: postgresql://neondb_owner:npg_Qm52GBYqekcv@ep-round-glade-a1922skr-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+
+    disk:
+      name: n8n-data
+      mountPath: /home/node/.n8n   # path hard-coded in n8n
+      sizeGB: 1
